@@ -1,9 +1,4 @@
-var v1 = { model: "508", company: "Peugeot", speed: 220 };
-var v2 = { model: "A4", company: "AUDI", speed: 280 };
-var v3 = { model: "316i", company: "BMW", speed: 280 };
-var v4 = { model: "Clio", company: "Renault", speed: 190 };
-
-var garage = [v1, v2, v3, v4];
+var garage = [];
 
 function boost(x) {
   garage[x].speed = x.speed * 2;
@@ -23,11 +18,11 @@ function makeUnavailable(x) {
 }
 
 function decideAvailableOrNot(x) {
-  if(x) {
-    return "Disponible"
+  if (garage[x].isAvailable) {
+    return "Disponible";
   } else {
-    return "Indisponible"
-  } 
+    return "Indisponible";
+  }
 }
 
 var table = document.getElementById("table").getElementsByTagName("tbody")[0];
@@ -37,9 +32,46 @@ function renderTable() {
   while (table.hasChildNodes()) {
     table.removeChild(table.firstChild);
   }
-    for(var i = 0; i < garage.length - 1; i++) {
-      table.innerHTML += '<tr><td>' + garage[i].model + '</td><td>' + garage[i].company + '</td><td>' + garage[i].speed + '</td><td>' + decideAvailableOrNot(garage[i].isAvailable) + '</td><td><button onclick="makeAvailable(' + i + ')">Make available</button></td></tr>';
-    }
+  for (var i = 0; i < garage.length; i++) {
+    table.innerHTML +=
+      "<tr><td>" +
+      garage[i].model +
+      "</td><td>" +
+      garage[i].company +
+      "</td><td>" +
+      garage[i].speed +
+      "</td><td>" +
+      decideAvailableOrNot(i) +
+      "</td><td>" +
+      renderButton(i) +
+      "</td></tr>";
   }
+}
 
-renderTable();
+function addCar() {
+  var newCar = {
+    model: document.getElementById("name").value,
+    company: document.getElementById("constructor").value,
+    speed: document.getElementById("speed").value
+  };
+  garage.push(newCar);
+  resetCar();
+  renderTable();
+}
+
+function resetCar() {
+  document.getElementById("name").value = "";
+  document.getElementById("constructor").value = "";
+  document.getElementById("speed").value = "";
+}
+
+function renderButton(x) {
+  if (garage[x].isAvailable) {
+    return (
+      '<button onclick="makeUnavailable(' + x + ')">Make unavailable</button>'
+    );
+  } else {
+    return '<button onclick="makeAvailable(' + x + ')">Make available</button>';
+  }
+}
+
