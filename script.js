@@ -43,10 +43,12 @@ function renderTable() {
       "</td><td>" +
       decideAvailableOrNot(i) +
       "</td><td>" +
-      renderButton(i) +
+      renderButtons(i) +
       "</td></tr>";
   }
 }
+
+renderTable();
 
 function addCar() {
   var newCar = {
@@ -59,13 +61,40 @@ function addCar() {
   renderTable();
 }
 
+function deleteCar(x) {
+  var garageAux = [];
+  for(var i = 0; i < garage.length; i++) {
+    if(i !== x){
+      garageAux.push(garage[i]);
+    }
+  }
+  garage = garageAux;
+  renderTable();
+}
+
+function verifCar() {
+  if (document.getElementById("name").value === "") {
+    alert("Add name!");
+  } else {
+    if (document.getElementById("constructor").value === "") {
+      alert("Add company name!");
+    } else {
+      if (document.getElementById("speed").value === "") {
+        alert("Add speed!");
+      } else {
+        addCar();
+      }
+    }
+  }
+}
+
 function resetCar() {
   document.getElementById("name").value = "";
   document.getElementById("constructor").value = "";
   document.getElementById("speed").value = "";
 }
 
-function renderButton(x) {
+function renderAvailablityButton(x) {
   if (garage[x].isAvailable) {
     return (
       '<button onclick="makeUnavailable(' + x + ')">Make unavailable</button>'
@@ -75,3 +104,10 @@ function renderButton(x) {
   }
 }
 
+function renderDeleteButton(x) {
+  return '<button onclick="deleteCar(' + x + ')">Delete</button>';
+}
+
+function renderButtons(x) {
+  return renderAvailablityButton(x) + renderDeleteButton(x);
+}
